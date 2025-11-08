@@ -1,0 +1,12 @@
+# Microsoft Agent Framework (required --pre flag for preview version)
+agent-framework-azure-ai
+
+# OpenAI client for GitHub Models
+openai>=1.0.0
+
+# Additional utilities
+python-dotenv>=1.0.0
+schedule>=1.2.0
+
+# Optional dependencies
+pathlib
