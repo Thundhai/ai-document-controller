@@ -4,16 +4,29 @@ An intelligent document management agent that helps you organize, clean up, and 
 
 ## ✨ Features
 
+### 🔄 **Hybrid Online/Offline Mode (NEW!)**
+- **🤖 Online Mode**: Full AI-powered insights with internet connection
+- **🔧 Offline Mode**: Rule-based recommendations without internet
+- **🔄 Automatic Fallback**: Seamless switching when connection is lost
+- **⚡ No Internet Dependency**: Core features work offline
+
+### 📊 **Core Document Management**
 - **🔍 Smart Document Scanning**: Recursively scan directories and analyze document metadata
 - **🔄 Duplicate Detection**: Find exact duplicate files using content hashing
 - **📊 Disk Usage Analysis**: Analyze space usage by file type and size
 - **📅 Old File Detection**: Identify files that haven't been modified in a specified time period
-- **💡 Organization Suggestions**: Get AI-powered recommendations for document organization
-- **🤖 Interactive Chat Interface**: Natural language interaction with the AI agent
+- **💡 Organization Suggestions**: Get AI-powered or rule-based recommendations for document organization
+
+### 🤖 **Interactive Features**
+- **🤖 Interactive Chat Interface**: Natural language interaction with the AI agent (online mode)
+- **🔧 Offline Chat**: Rule-based responses and guidance (offline mode)
 - **⚡ CLI Support**: Command-line interface for quick scans and batch operations
-- **🔄 AUTOMATION**: Daily, weekly, and monthly automated cleanup tasks
+
+### 🔄 **AUTOMATION** 
+- **📅 Daily/Weekly/Monthly**: Automated cleanup tasks
 - **📅 Task Scheduling**: Windows Task Scheduler integration for hands-free operation
 - **📊 Automation Reports**: Detailed reports with AI-powered recommendations
+- **🔧 Offline Automation**: Basic automation works without internet
 
 ## 🆕 Automation Features
 
@@ -35,7 +48,44 @@ An intelligent document management agent that helps you organize, clean up, and 
 - Long-term file management strategies
 - Comprehensive AI-powered insights
 
-## 🚀 Quick Start
+## � **Hybrid Online/Offline Mode (NEW!)**
+
+The AI Document Controller now supports **both online AI mode and offline rule-based mode**, with seamless automatic switching:
+
+### 🤖 **Online Mode (AI-Powered)**
+- Full GitHub Models integration with GPT-4.1-mini
+- Natural language conversation and intelligent responses  
+- AI-powered organization recommendations
+- Smart duplicate analysis and cleanup suggestions
+- Advanced file pattern recognition
+
+### 🔧 **Offline Mode (Rule-Based)**
+- No internet connection required
+- Rule-based file analysis and recommendations
+- Duplicate detection using file hashing
+- File type organization suggestions
+- Basic automation capabilities
+
+### ⚡ **Key Benefits**
+- **Automatic Detection**: Tests connectivity and initializes appropriate mode
+- **Seamless Fallback**: Switches to offline mode if online fails
+- **No Internet Dependency**: Core features always available
+- **Consistent Interface**: Same commands work in both modes
+- **Graceful Degradation**: Never fails due to connectivity issues
+
+### 🎛️ **Mode Control**
+```bash
+# Force offline mode
+FORCE_OFFLINE=true python document_controller.py
+
+# Online mode (if token available)
+python document_controller.py
+
+# CLI with automatic detection
+python cli.py --mode interactive
+```
+
+---
 
 ### Prerequisites
 

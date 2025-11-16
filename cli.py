@@ -10,8 +10,21 @@ import argparse
 import os
 import sys
 from pathlib import Path
+from typing import Optional
 
 from dotenv import load_dotenv
+
+# Fix Windows console encoding for Unicode characters
+if sys.platform == "win32":
+    try:
+        # Try to set UTF-8 encoding for better Unicode support
+        sys.stdout.reconfigure(encoding='utf-8')
+        sys.stderr.reconfigure(encoding='utf-8')
+    except:
+        # Fallback: replace problematic Unicode characters
+        import codecs
+        sys.stdout = codecs.getwriter('utf-8')(sys.stdout.buffer, errors='replace')
+        sys.stderr = codecs.getwriter('utf-8')(sys.stderr.buffer, errors='replace')
 
 # Add the current directory to the path to import our module
 sys.path.insert(0, str(Path(__file__).parent))
@@ -19,12 +32,15 @@ sys.path.insert(0, str(Path(__file__).parent))
 from document_controller import DocumentController
 
 
-async def quick_scan(directory: str, github_token: str):
+async def quick_scan(directory: str, github_token: Optional[str] = None):
     """Perform a quick scan and analysis of a directory"""
     controller = DocumentController(github_token)
-    await controller.initialize_agent()
     
-    print(f"🔍 Scanning directory: {directory}")
+    if controller.is_online_mode:
+        await controller.initialize_agent()
+    
+    mode_text = "🤖 AI-powered" if controller.is_online_mode else "🔧 Offline"
+    print(f"🔍 {mode_text} scan of directory: {directory}")
     
     # Use the agent's tools directly for quick analysis
     scan_result = controller.scan_documents(directory, 5000)
@@ -35,11 +51,7 @@ async def quick_scan(directory: str, github_token: str):
     duplicate_result = controller.find_duplicates()
     print(duplicate_result)
     
-    print("\n💾 Analyzing disk usage...")
-    usage_result = controller.analyze_disk_usage()
-    print(usage_result)
-    
-    print("\n📅 Finding old files...")
+    print("\n Finding old files...")
     old_files_result = controller.get_old_files(365)
     print(old_files_result)
     
@@ -48,7 +60,7 @@ async def quick_scan(directory: str, github_token: str):
     print(suggestions)
 
 
-async def interactive_mode(github_token: str):
+async def interactive_mode(github_token: Optional[str] = None):
     """Run interactive mode"""
     controller = DocumentController(github_token)
     await controller.run_interactive_session()
@@ -86,11 +98,16 @@ async def main():
     
     # Get GitHub token
     github_token = args.token or os.getenv("GITHUB_TOKEN")
-    if not github_token:
-        print("❌ Error: GitHub token is required")
-        print("Set GITHUB_TOKEN environment variable or use --token argument")
-        print("Get a token from: https://github.com/settings/tokens")
-        sys.exit(1)
+    force_offline = os.getenv("FORCE_OFFLINE", "false").lower() == "true"
+    
+    if force_offline:
+        print("🔧 Forced offline mode enabled")
+        github_token = None
+    elif not github_token:
+        print("⚠️  No GitHub token found - running in offline mode")
+        print("💡 Set GITHUB_TOKEN environment variable or use --token argument for AI features")
+        print("📖 Get a token from: https://github.com/settings/tokens")
+        print("🔧 Continuing with offline capabilities...\n")
     
     try:
         if args.mode == "scan":
